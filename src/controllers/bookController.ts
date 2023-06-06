@@ -7,7 +7,7 @@ export class BookController implements IBookController {
 
     constructor(private readonly bookService: IBookService){}
 
-        getAllBooks = catchAsync( async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+        getAllBooks = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
             const data = await this.bookService.getAllBooks()
 
             return res.status(200).json({
@@ -17,24 +17,55 @@ export class BookController implements IBookController {
             })
         })
 
-        createBook = catchAsync( async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+        createBook = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
             const data = await this.bookService.createBook(req.body)
 
             return res.status(201).json({
                 status: 'success',  
                 message: 'Data created',
-                data,
+                data
             })
         })
 
-        getBookById = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+        getBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
             const data = await this.bookService.getBookById(req.params.id)
 
-        }
-        updateBookById = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+            return res.status(200).json({
+                status: 'success',
+                data
+            })
 
-        }
-        deleteBookById = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+        })
 
-        }
+        updateBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+            const data = await this.bookService.updateBookById(req.params.id, req.body)
+            
+            return res.status(201).json({
+                status: 'success',
+                message: 'Book Updated!',
+                data
+            })
+        })
+
+        deleteBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+            const data = await this.bookService.deleteBookById(req.params.id)
+            
+            return res.status(200).json({
+                status: 'success',
+                message: 'Book Deleted!',
+                data
+            })
+        })
+
+        // title: req.body.title,
+        // totalPages: req.body.totalPages,
+        // yearPublished: req.body.yearPublished,
+        // price: req.body.price,
+        // autor: req.body.autor,
+        // editor: req.body.editor,
+        // publisher: req.body.publisher,
+        // genre: req.body.genre,
+        // synopsis: req.body.synopsis,
+        // rating: req.body.rating,
+        // language: req.body.language
 }

@@ -21,7 +21,7 @@ bookRouter
     
 bookRouter
     .route('/books/:id')
-    .get(bookController.deleteBookById)
+    .get(bookController.getBookById)
     .delete(bookController.deleteBookById)
     .patch(bookController.updateBookById)
 

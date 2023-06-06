@@ -19,10 +19,10 @@ export class BookService implements IBookService {
         }
 
         updateBookById = (id: string, data: object) => {
-
+            return this.bookRepository.updateBookById(id, data)
         }
         
         deleteBookById = (id: string) => {
-
+            return this.bookRepository.deleteBookById(id)
         }
 }

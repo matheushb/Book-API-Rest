@@ -13,14 +13,15 @@ export class BookRepository implements IBookRepository {
 
         getBookById = async(id: string) => {
                 return await Book.findOne({_id: id})
-                        
         }
 
         updateBookById = async(id: string, data: object) => {
-
+                return await Book.findByIdAndUpdate(id, data, {
+                        runValidators: true,
+                })
         }
         
         deleteBookById = async(id: string) => {
-
+                return await Book.findByIdAndDelete(id)
         }
 }
