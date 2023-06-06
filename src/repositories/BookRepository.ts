@@ -8,11 +8,12 @@ export class BookRepository implements IBookRepository {
         }
 
         createBook = async(data: object) => {
-
+                return await Book.create(data)
         }
 
         getBookById = async(id: string) => {
-
+                return await Book.findOne({_id: id})
+                        
         }
 
         updateBookById = async(id: string, data: object) => {

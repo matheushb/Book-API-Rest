@@ -22,7 +22,7 @@ const BookSchema = new mongoose.Schema<IBook>(
         yearPublished: {
             type: Number,
             min: 1800,
-            max: new Date().getFullYear(),
+            max: new Date().getFullYear() + 10,
             required: [true, 'Please insert the year the book was published.'],
         },
         price: {

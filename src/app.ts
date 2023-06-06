@@ -1,7 +1,7 @@
 import express, { urlencoded } from 'express'
 import * as dotenv from 'dotenv';
 import bookRouter from './routes/bookRouter';
-import { databaseConnect } from './database/mongoConfig';
+import { databaseConnect } from './config/mongoConfig';
 import { errorHandlingMiddleware } from './middlewares/errorHandling';
 dotenv.config();
 
@@ -27,7 +27,7 @@ app.all('*', (req, res) => {
 databaseConnect()
 
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 const server = app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`)
 });

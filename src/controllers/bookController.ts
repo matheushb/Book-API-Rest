@@ -17,9 +17,18 @@ export class BookController implements IBookController {
             })
         })
 
-        createBook = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
-        }
+        createBook = catchAsync( async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+            const data = await this.bookService.createBook(req.body)
+
+            return res.status(201).json({
+                status: 'success',  
+                message: 'Data created',
+                data,
+            })
+        })
+
         getBookById = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+            const data = await this.bookService.getBookById(req.params.id)
 
         }
         updateBookById = async(req: Request, res: Response, next: NextFunction): Promise<any> => {
