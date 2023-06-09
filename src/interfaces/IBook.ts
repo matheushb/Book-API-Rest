@@ -1,4 +1,4 @@
-export interface IBook {
+export interface IBook extends Document {
     title : string
     slug: string
     totalPages : number
@@ -6,9 +6,10 @@ export interface IBook {
     price: number
     autor: string[]
     editor: string
-    publisher: string
     genre: string[]
     synopsis: string
-    rating?: number
+    ratingAverage?: number
+    ratingQuantity: number
     language: string[]
+    createdAt: Date
 }

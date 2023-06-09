@@ -1,28 +1,29 @@
 import IBookService from "../interfaces/IBookService"
 import IBookRepository from "../interfaces/IBookService"
-import CreateBookDTO from '../DTOs/createBookDTO'
+import  { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
+import { IBook } from "../interfaces/IBook";
 
 export class BookService implements IBookService {
 
     constructor(private readonly bookRepository: IBookRepository){}
 
-        getAllBooks = () => {
+        getAllBooks = (): Promise<Array<IBook>> => {
             return this.bookRepository.getAllBooks();
         }
 
-        createBook = (data: CreateBookDTO) => {
+        createBook = (data: ICreateBookDTO): Promise<IBook | null> => {
             return this.bookRepository.createBook(data);
         }
 
-        getBookById = (id: string) => {
+        getBookById = (id: string): Promise<IBook | null> => {
             return this.bookRepository.getBookById(id);
         }
 
-        updateBookById = (id: string, data: object) => {
+        updateBookById = (id: string, data: IUpdateBookDTO): Promise<IBook | null> => {
             return this.bookRepository.updateBookById(id, data)
         }
         
-        deleteBookById = (id: string) => {
+        deleteBookById = (id: string): Promise<IBook | null> => {
             return this.bookRepository.deleteBookById(id)
         }
 }

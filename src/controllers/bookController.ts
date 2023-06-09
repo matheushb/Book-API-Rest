@@ -2,12 +2,15 @@ import IBookController from "../interfaces/IBookController"
 import IBookService from "../interfaces/IBookService";
 import { NextFunction, Request, Response } from 'express';
 import { catchAsync } from "../utils/catchAsyncError";
+import { ApiError } from "../utils/ApiError";
 
 export class BookController implements IBookController {
 
     constructor(private readonly bookService: IBookService){}
 
-        getAllBooks = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+        getAllBooks = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<Response> => {
+            console.log(req.query);
+            
             const data = await this.bookService.getAllBooks()
 
             return res.status(200).json({
@@ -17,17 +20,18 @@ export class BookController implements IBookController {
             })
         })
 
-        createBook = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+        createBook = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+            if(Object.keys(req.body).length === 0) return next(new ApiError('Please insert data to create book', 401))
             const data = await this.bookService.createBook(req.body)
 
             return res.status(201).json({
                 status: 'success',  
-                message: 'Data created',
+                message: 'Book created',
                 data
             })
         })
 
-        getBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+        getBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<Response> => {
             const data = await this.bookService.getBookById(req.params.id)
 
             return res.status(200).json({
@@ -37,7 +41,8 @@ export class BookController implements IBookController {
 
         })
 
-        updateBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+        updateBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+            if(Object.keys(req.body).length === 0) return next(new ApiError('Please insert data to modify.', 401))
             const data = await this.bookService.updateBookById(req.params.id, req.body)
             
             return res.status(201).json({
@@ -47,7 +52,7 @@ export class BookController implements IBookController {
             })
         })
 
-        deleteBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<any> => {
+        deleteBookById = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<Response> => {
             const data = await this.bookService.deleteBookById(req.params.id)
             
             return res.status(200).json({
@@ -57,15 +62,5 @@ export class BookController implements IBookController {
             })
         })
 
-        // title: req.body.title,
-        // totalPages: req.body.totalPages,
-        // yearPublished: req.body.yearPublished,
-        // price: req.body.price,
-        // autor: req.body.autor,
-        // editor: req.body.editor,
-        // publisher: req.body.publisher,
-        // genre: req.body.genre,
-        // synopsis: req.body.synopsis,
-        // rating: req.body.rating,
-        // language: req.body.language
+
 }

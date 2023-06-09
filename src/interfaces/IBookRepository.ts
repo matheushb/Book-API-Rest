@@ -1,11 +1,15 @@
+import { ICreateBookDTO, IUpdateBookDTO } from "../DTOs/bookDTOs"
+import { IBook } from "./IBook"
+
 export default interface IBookRepository {
-    getAllBooks(): any
 
-    createBook(body: object): any
+    getAllBooks(): Promise<Array<IBook>>
 
-    getBookById(id: string): any
+    createBook(body: ICreateBookDTO): Promise<IBook | null>
 
-    updateBookById(id: string, body: object): any
+    getBookById(id: string): Promise<IBook | null>
+
+    updateBookById(id: string, data: object): Promise<IBook | null>
     
-    deleteBookById(id: string): any
+    deleteBookById(id: string): Promise<IBook | null>
 }

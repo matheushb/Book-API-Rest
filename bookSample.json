@@ -1,0 +1,62 @@
+[
+    {
+        "title": "Neuromancer: 1",
+        "totalPages": 320,
+        "yearPublished": 2016,
+        "price": 36.00,
+        "autor": "William Gibson",
+        "editor": "Aleph",
+        "genre": "Sci-Fi",
+        "synopsis": "O Céu sobre o porto tinha cor de televisão num canal fora do ar. Considerada a obra precursora do movimento cyberpunk e um clássico da ficção científica moderna, Neuromancer conta a história de Case, um cowboy do ciberespaço e hacker da matrix. Como punição por tentar enganar os patrões, seu sistema nervoso foi contaminado por uma toxina que o impede de entrar no mundo virtual. Agora, ele vaga pelos subúrbios de Tóquio, cometendo pequenos crimes para sobreviver, e acaba se envolvendo em uma jornada que mudará para sempre o mundo e a percepção da realidade.",
+        "ratingAverage": 4.6,
+        "language": "English"
+    },
+    {
+        "title": "O Hobbit",
+        "totalPages": 336,
+        "yearPublished": 2019,
+        "price": 44.90,
+        "autor": "J.R.R Tolkien",
+        "editor": "HarperCollins",
+        "genre": "Fantasy",
+        "synopsis": "Bilbo Bolseiro era um dos mais respeitáveis hobbits de todo o Condado até que, um dia, o mago Gandalf bate à sua porta. A partir de então, toda sua vida pacata e campestre soprando anéis de fumaça com seu belo cachimbo começa a mudar. Ele é convocado a participar de uma aventura por ninguém menos do que Thorin Escudo-de-Carvalho, um príncipe do poderoso povo dos Anãos.",
+        "ratingAverage": 4.9,
+        "language": "Portuguese"
+    },
+    {
+        "title": "Outsider",
+        "totalPages": 528,
+        "yearPublished": 2018,
+        "price": 43.90,
+        "autor": "Stephen King",
+        "editor": "Suma",
+        "genre": "Thriller",
+        "synopsis": "O corpo de um menino de onze anos é encontrado abandonado no parque de Flint City, brutalmente assassinado. Testemunhas e impressões digitais apontam o criminoso como uma das figuras mais conhecidas da cidade ― Terry Maitland, treinador da Liga Infantil de beisebol, professor de inglês, casado e pai de duas filhas.",
+        "ratingAverage": 4.7,
+        "language": "Portuguese"
+    },
+    {
+        "title": "Harry Potter e a Pedra Filosofal: 1",
+        "totalPages": 208,
+        "yearPublished": 2017,
+        "price": 34.90,
+        "autor": "J.K Rowling",
+        "editor": "Rocco",
+        "genre": "Fantasy",
+        "synopsis": "Harry Potter é um garoto cujos pais, feiticeiros, foram assassinados por um poderosíssimo bruxo quando ele ainda era um bebê. Ele foi levado, então, para a casa dos tios que nada tinham a ver com o sobrenatural. Pelo contrário. Até os 10 anos, Harry foi uma espécie de gata borralheira: maltratado pelos tios, herdava roupas velhas do primo gorducho, tinha óculos remendados e era tratado como um estorvo",
+        "ratingAverage": 4.9,
+        "language": "Portuguese"
+    },
+    {
+        "title": "The Maze Runner: 1",
+        "totalPages": 375,
+        "yearPublished": 2014,
+        "price": 80.72,
+        "autor": "James Dashner",
+        "editor": "Delacorte Press Books",
+        "genre": "Action",
+        "synopsis": "Perfect for fans of Divergent and The Hunger Games, this special movie tie-in edition of the first book in the #1 New York Times bestselling Maze Runner series, The Maze Runner, features an eight-page full-color insert with photos from the film. The Maze Runner movie and its sequel, Maze Runner: The Scorch Trials, feature the star of MTV’s Teen Wolf, Dylan O’Brien, as Thomas",
+        "ratingAverage": 4.4,
+        "language": "English"
+    }
+]

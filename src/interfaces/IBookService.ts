@@ -1,12 +1,14 @@
-import CreateBookDTO from '../DTOs/createBookDTO'
+import { ICreateBookDTO } from '../DTOs/bookDTOs'
+import { IBook } from './IBook'
 export default interface IBookService {
-    getAllBooks(): any
-
-    createBook(data: CreateBookDTO): any
-
-    getBookById(id: string): any
-
-    updateBookById(id: string, data: object): any
     
-    deleteBookById(id: string): any
+    getAllBooks(): Promise<Array<IBook>>
+
+    createBook(data: ICreateBookDTO): Promise<IBook | null>
+
+    getBookById(id: string): Promise<IBook | null>
+
+    updateBookById(id: string, data: object): Promise<IBook | null>
+    
+    deleteBookById(id: string): Promise<IBook | null>
 }
