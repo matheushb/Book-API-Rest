@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import validator from 'validator'
 import { IUser } from '../interfaces/IUser'
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema<IUser>(
   {
     name: {
       type: String,
