@@ -3,16 +3,23 @@ import IBookService from "../interfaces/IBookService";
 import { NextFunction, Request, Response } from 'express';
 import { catchAsync } from "../utils/catchAsyncError";
 import { ApiError } from "../utils/ApiError";
+import Book from "../models/bookSchema";
 
 export class BookController implements IBookController {
 
     constructor(private readonly bookService: IBookService){}
 
         getAllBooks = catchAsync(async(req: Request, res: Response, next: NextFunction): Promise<Response> => {
-            console.log(req.query);
+            let data;
+            if(Object.keys(req.query).length !== 0) {
+                let queryObj = {...req.query}
+                const excludedFields = ['page', 'sort', 'limit', 'fields']
+                excludedFields.forEach(el => {delete queryObj[el]})
+                data = await Book.find(queryObj);
+            }else {
+                 data = await this.bookService.getAllBooks()
+            }
             
-            const data = await this.bookService.getAllBooks()
-
             return res.status(200).json({
                 status: 'success',
                 results: data.length,

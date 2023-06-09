@@ -6,8 +6,6 @@ import IBookController from "../interfaces/IBookController";
 import IBookRepository from "../interfaces/IBookRepository";
 import IBookService from "../interfaces/IBookService";
 
-
-
 const bookRouter = express.Router()
 
 const bookRepository: IBookRepository = new BookRepository
