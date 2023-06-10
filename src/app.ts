@@ -4,7 +4,7 @@ import bookRouter from './routes/bookRouter'
 import { databaseConnect } from './config/mongoConfig'
 import { errorHandlingMiddleware } from './middlewares/errorHandling'
 import userRouter from './routes/userRouter'
-dotenv.config()
+dotenv.config({ path: './src/config/.env' })
 
 const app = express()
 

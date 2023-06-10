@@ -4,4 +4,5 @@ export interface IUser extends Document {
   password: string
   passwordConfirm: string
   createdAt: Date
+  comparePass(candidatePass: string, userPass: string): Promise<boolean>
 }

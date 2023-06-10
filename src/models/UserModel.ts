@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 import { IUser } from '../interfaces/IUser'
+import bcrypt from 'bcrypt'
 
 const UserSchema = new mongoose.Schema<IUser>(
   {
@@ -21,6 +22,7 @@ const UserSchema = new mongoose.Schema<IUser>(
       type: String,
       required: [true, 'Please insert your password'],
       minLength: [5, 'Password needs at least 5 characters'],
+      select: false,
     },
     passwordConfirm: {
       type: String,
@@ -41,6 +43,16 @@ const UserSchema = new mongoose.Schema<IUser>(
     versionKey: false,
   }
 )
+
+UserSchema.pre('save', async function (next: any) {
+  this.password = await bcrypt.hash(this.password, 12)
+  this.passwordConfirm = undefined
+  next()
+})
+
+UserSchema.methods.comparePass = function (candidatePass: string, userPass: string): Promise<boolean> {
+  return bcrypt.compare(candidatePass, userPass)
+}
 
 const User = mongoose.model('User', UserSchema)
 
