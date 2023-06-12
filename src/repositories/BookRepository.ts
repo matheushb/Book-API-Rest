@@ -1,7 +1,7 @@
 import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
 import { IBook } from '../interfaces/IBook'
 import IBookRepository from '../interfaces/IBookService'
-import Book from '../models/bookSchema'
+import Book from '../models/BookSchema'
 
 export class BookRepository implements IBookRepository {
   getAllBooks = async (): Promise<any> => {

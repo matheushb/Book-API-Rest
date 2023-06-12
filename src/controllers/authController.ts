@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { IAuthController, IDecodedPayload } from '../interfaces/IAuthController'
-import User from '../models/UserModel'
+import User from '../models/UserSchema'
 import { ApiError } from '../utils/ApiError'
 import { catchAsync } from '../utils/catchAsyncError'
 import jwt from 'jsonwebtoken'
@@ -37,7 +37,6 @@ export class AuthController implements IAuthController {
       return next(new ApiError('Wrong email or password.', 401))
 
     const token = this.signToken(user.id)
-    console.log(token)
 
     res.status(200).json({
       status: 'success',
