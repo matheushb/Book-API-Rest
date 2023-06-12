@@ -6,8 +6,15 @@ import { IBook } from '../interfaces/IBook'
 export class BookService implements IBookService {
   constructor(private readonly bookRepository: IBookRepository) {}
 
-  getAllBooks = (): Promise<Array<IBook>> => {
-    return this.bookRepository.getAllBooks()
+  getAllBooks = (queryParams: any): Promise<Array<IBook>> => {
+    if (Object.keys(queryParams).length !== 0) {
+      const excludedFields = ['page', 'sort', 'limit', 'fields']
+      excludedFields.forEach(el => {
+        delete queryParams[el]
+      })
+    }
+    const queryStr = JSON.stringify(queryParams).replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`)
+    return this.bookRepository.getAllBooks(JSON.parse(queryStr))
   }
 
   createBook = (data: ICreateBookDTO): Promise<IBook | null> => {

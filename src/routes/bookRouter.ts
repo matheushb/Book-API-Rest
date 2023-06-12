@@ -17,13 +17,13 @@ const bookController: IBookController = new BookController(bookService)
 
 bookRouter
   .route('/books')
-  .get(authController.protectRoute, bookController.getAllBooks)
-  .post(authController.protectRoute, bookController.createBook)
+  .get(authController.protectRoute, authController.restrictedTo('admin'), bookController.getAllBooks)
+  .post(authController.protectRoute, authController.restrictedTo('admin', 'recruiter'), bookController.createBook)
 
 bookRouter
   .route('/books/:id')
-  .get(authController.protectRoute, bookController.getBookById)
-  .delete(authController.protectRoute, bookController.deleteBookById)
-  .patch(authController.protectRoute, bookController.updateBookById)
+  .get(authController.protectRoute, authController.restrictedTo('admin'), bookController.getBookById)
+  .delete(authController.protectRoute, authController.restrictedTo('admin'), bookController.deleteBookById)
+  .patch(authController.protectRoute, authController.restrictedTo('admin', 'recruiter'), bookController.updateBookById)
 
 export default bookRouter

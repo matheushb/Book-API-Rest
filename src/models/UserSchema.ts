@@ -34,6 +34,11 @@ const UserSchema = new mongoose.Schema<IUser>(
         message: 'Passwords dont match.',
       },
     },
+    role: {
+      type: String,
+      enum: ['user', 'recruiter', 'admin'],
+      default: 'user',
+    },
     createdAt: {
       type: Date,
       default: new Date(),

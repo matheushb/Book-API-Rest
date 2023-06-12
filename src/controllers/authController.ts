@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { IAuthController, IDecodedPayload } from '../interfaces/IAuthController'
+import { IAuthController, IDecodedPayload, roles } from '../interfaces/IAuthController'
 import User from '../models/UserSchema'
 import { ApiError } from '../utils/ApiError'
 import { catchAsync } from '../utils/catchAsyncError'
@@ -20,6 +20,7 @@ export class AuthController implements IAuthController {
       email: req.body.email,
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
+      role: req.body.role,
       createdAt: req.body.createdAt,
     })
     const token = this.signToken(data.id)
@@ -32,10 +33,11 @@ export class AuthController implements IAuthController {
 
   userLogin = catchAsync(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     if (!req.body.password || !req.body.email) return next(new ApiError('Please send Email and password', 401))
-    const user = await User.findOne({ email: req.body.email }, { email: 1, password: 1, createdAt: 1 })
+
+    const user = await User.findOne({ email: req.body.email }, { _id: 1, email: 1, password: 1 })
+
     if (!user || !(await user?.comparePass(req.body.password, user.password)))
       return next(new ApiError('Wrong email or password.', 401))
-
     const token = this.signToken(user.id)
 
     res.status(200).json({
@@ -47,6 +49,7 @@ export class AuthController implements IAuthController {
 
   getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const data = await User.find()
+
     res.status(200).json({
       status: 'success',
       results: data.length,
@@ -56,7 +59,7 @@ export class AuthController implements IAuthController {
 
   deleteUser = catchAsync(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const data = await User.findOneAndDelete({ _id: req.params.id })
-    console.log(data)
+
     res.status(200).json({
       status: 'success',
       data,
@@ -68,11 +71,20 @@ export class AuthController implements IAuthController {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1]
     }
-    if (!token) return next(new ApiError('Please Log In to access routes.', 401))
+    if (!token) return next(new ApiError("You're not logged in, please login to access routes", 401))
+
     const decodedPayload = <IDecodedPayload>jwt.verify(token, process.env.JWT_SECRET!)
     const user = await User.findOne({ _id: decodedPayload.id })
+
     if (!user) return next(new ApiError('Please Log In again.', 401))
     req.user = user
     next()
   })
+
+  restrictedTo = (...roles: roles[]) => {
+    return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+      if (!roles.includes(req.user.role)) throw new ApiError('You dont have permission to access this route.', 401)
+      return next()
+    })
+  }
 }

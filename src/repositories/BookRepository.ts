@@ -4,8 +4,8 @@ import IBookRepository from '../interfaces/IBookService'
 import Book from '../models/BookSchema'
 
 export class BookRepository implements IBookRepository {
-  getAllBooks = async (): Promise<any> => {
-    return await Book.find()
+  getAllBooks = async (queryParams: object): Promise<any> => {
+    return await Book.find(queryParams)
   }
 
   createBook = async (data: ICreateBookDTO): Promise<IBook | null> => {
