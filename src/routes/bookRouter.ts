@@ -7,6 +7,7 @@ import IBookRepository from '../interfaces/IBookRepository'
 import IBookService from '../interfaces/IBookService'
 import { AuthController } from '../controllers/authController'
 import { IAuthController } from '../interfaces/IAuthController'
+import { AliasTopBooks } from '../middlewares/topFiveBooks'
 
 const bookRouter = express.Router()
 
@@ -14,6 +15,8 @@ const authController: IAuthController = new AuthController()
 const bookRepository: IBookRepository = new BookRepository()
 const bookService: IBookService = new BookService(bookRepository)
 const bookController: IBookController = new BookController(bookService)
+
+bookRouter.route('/books/top-five-books').get(AliasTopBooks, bookController.getAllBooks)
 
 bookRouter
   .route('/books')
