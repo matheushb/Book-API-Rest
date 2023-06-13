@@ -1,11 +1,18 @@
 import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
 import { IBook } from '../interfaces/IBook'
-import IBookRepository from '../interfaces/IBookService'
+import IBookRepository from '../interfaces/IBookRepository'
+import { QueryFilter } from '../interfaces/IBookService'
 import Book from '../models/BookSchema'
 
 export class BookRepository implements IBookRepository {
-  getAllBooks = async (queryParams: object): Promise<any> => {
-    return await Book.find(queryParams)
+  getAllBooks = async (queryParams: object, queryFilter: QueryFilter): Promise<IBook[]> => {
+    console.log(queryFilter)
+
+    const query = Book.find(queryParams).sort(queryFilter.sort)
+    query.skip(queryFilter.page!).limit(queryFilter.limit!)
+    if (queryFilter.fields) query.select(queryFilter.fields)
+
+    return query
   }
 
   createBook = async (data: ICreateBookDTO): Promise<IBook | null> => {

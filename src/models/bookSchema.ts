@@ -9,7 +9,7 @@ const BookSchema = new mongoose.Schema<IBook>(
       required: [true, 'Please insert the book title.'],
       unique: true,
       minlength: [4, 'Book title must contain at least 4 characters.'],
-      maxlength: [64, 'Book title cant have more than 64 characters.'],
+      maxlength: [92, 'Book title cant have more than 92 characters.'],
       trim: true,
     },
     slug: {
@@ -40,7 +40,18 @@ const BookSchema = new mongoose.Schema<IBook>(
     },
     genre: {
       type: [String],
-      enum: ['Action', 'Drama', 'Romance', 'Adventure', 'Mistery', 'Sci-Fi', 'Horror', 'Fantasy', 'Thriller'],
+      enum: [
+        'Action',
+        'Drama',
+        'Romance',
+        'Adventure',
+        'Mistery',
+        'Sci-Fi',
+        'Horror',
+        'Fantasy',
+        'Thriller',
+        'Children',
+      ],
       required: true,
     },
     synopsis: {

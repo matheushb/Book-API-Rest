@@ -1,8 +1,9 @@
 import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
 import { IBook } from './IBook'
+import { QueryFilter } from './IBookService'
 
 export default interface IBookRepository {
-  getAllBooks(queryParams: object): Promise<Array<IBook>>
+  getAllBooks(queryParams: object, queryFilter: QueryFilter): Promise<IBook[]>
 
   createBook(body: ICreateBookDTO): Promise<IBook | null>
 

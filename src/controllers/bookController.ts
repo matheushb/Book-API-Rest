@@ -6,6 +6,7 @@ import { ApiError } from '../utils/ApiError'
 
 export class BookController implements IBookController {
   constructor(private readonly bookService: IBookService) {}
+
   getAllBooks = catchAsync(async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     let data = await this.bookService.getAllBooks({ ...req.query })
 
