@@ -12,10 +12,11 @@ export default interface IBookService {
   deleteBookById(id: string): Promise<IBook | null>
 }
 
-export interface QueryFilter extends Object {
+export interface IQueryFilterDTO extends Object {
   [key: string]: any
   page?: number
   sort?: string
   limit?: number
-  fields?: any
+  fields?: string
+  skip?: number
 }

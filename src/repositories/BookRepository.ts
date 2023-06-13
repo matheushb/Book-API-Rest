@@ -1,15 +1,19 @@
 import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
 import { IBook } from '../interfaces/IBook'
 import IBookRepository from '../interfaces/IBookRepository'
-import { QueryFilter } from '../interfaces/IBookService'
+import { IQueryFilterDTO } from '../interfaces/IBookService'
 import Book from '../models/BookSchema'
+import { ApiError } from '../utils/ApiError'
 
 export class BookRepository implements IBookRepository {
-  getAllBooks = async (queryParams: object, queryFilter: QueryFilter): Promise<IBook[]> => {
+  getAllBooks = async (queryParams: object, queryFilter: IQueryFilterDTO): Promise<IBook[]> => {
+    if (queryFilter.skip! >= (await Book.countDocuments())) throw new ApiError('This page doesnt exists!', 404)
     console.log(queryFilter)
 
     const query = Book.find(queryParams).sort(queryFilter.sort)
-    query.skip(queryFilter.page!).limit(queryFilter.limit!)
+
+    query.skip(queryFilter.skip!).limit(queryFilter.limit!)
+
     if (queryFilter.fields) query.select(queryFilter.fields)
 
     return query

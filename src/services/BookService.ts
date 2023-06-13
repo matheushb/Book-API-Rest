@@ -1,4 +1,4 @@
-import IBookService, { QueryFilter } from '../interfaces/IBookService'
+import IBookService, { IQueryFilterDTO } from '../interfaces/IBookService'
 import IBookRepository from '../interfaces/IBookRepository'
 import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
 import { IBook } from '../interfaces/IBook'
@@ -7,7 +7,7 @@ export class BookService implements IBookService {
   constructor(private readonly bookRepository: IBookRepository) {}
 
   getAllBooks = (queryParams: any): Promise<IBook[]> => {
-    let queryFilter: QueryFilter = {}
+    let queryFilter: IQueryFilterDTO = {}
     if (Object.keys(queryParams).length !== 0) {
       const excludedFields = ['page', 'sort', 'limit', 'fields']
       excludedFields.forEach(el => {
@@ -18,14 +18,13 @@ export class BookService implements IBookService {
       })
     }
     //sort
-    queryFilter.sort = '-createdAt'
-    if (queryFilter.sort) queryFilter.sort = queryFilter.sort.replaceAll(',', ' ')
+    queryFilter.sort = queryFilter.sort ? queryFilter.sort.replaceAll(',', ' ') : '-createdAt'
     //projection
     if (queryFilter.fields) queryFilter.fields = queryFilter.fields.replaceAll(',', ' ')
-
-    if (queryFilter.page && queryFilter.limit) {
-      queryFilter.page = queryFilter.limit * (queryFilter.page - 1) + 1
-    }
+    //pagination
+    if (!queryFilter.page || queryFilter.page < 1) queryFilter.page = 1
+    if (!queryFilter.limit || queryFilter.limit > 100 || queryFilter.limit < 1) queryFilter.limit = 100
+    queryFilter.skip = (queryFilter.page - 1) * queryFilter.limit
 
     const queryStr = JSON.stringify(queryParams).replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`)
     return this.bookRepository.getAllBooks(JSON.parse(queryStr), queryFilter)
