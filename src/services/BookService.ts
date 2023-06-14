@@ -45,4 +45,8 @@ export class BookService implements IBookService {
   deleteBookById = (id: string): Promise<IBook | null> => {
     return this.bookRepository.deleteBookById(id)
   }
+
+  getBookStats = () => {
+    return this.bookRepository.getBookStats()
+  }
 }

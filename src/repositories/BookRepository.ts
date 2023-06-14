@@ -49,4 +49,28 @@ export class BookRepository implements IBookRepository {
   deleteBookById = async (id: string): Promise<IBook | null> => {
     return await Book.findOneAndDelete({ _id: id })
   }
+
+  getBookStats = async () => {
+    return await Book.aggregate([
+      {
+        $match: { ratingAverage: { $gte: 0 } },
+      },
+      {
+        $group: {
+          _id: '$genre',
+          numOfBooks: { $count: {} },
+          maxPrice: { $max: '$price' },
+          minPrice: { $min: '$price' },
+          avgPrice: { $avg: '$price' },
+          numRatings: { $sum: '$ratingQuantity' },
+          maxRating: { $max: '$ratingAverage' },
+          minRating: { $min: '$ratingAverage' },
+          avgRating: { $avg: '$ratingAverage' },
+        },
+      },
+      {
+        $sort: { avgPrice: -1 },
+      },
+    ])
+  }
 }

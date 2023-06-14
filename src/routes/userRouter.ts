@@ -7,6 +7,7 @@ const authController = new AuthController()
 userRouter.get('/', authController.protectRoute, authController.getAllUsers)
 userRouter.post('/signup', authController.userSign)
 userRouter.post('/login', authController.userLogin)
+// userRouter.post('/reset', authController.passwordReset)
 userRouter.delete('/:id', authController.protectRoute, authController.deleteUser)
 
 export default userRouter

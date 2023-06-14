@@ -17,6 +17,7 @@ const bookService: IBookService = new BookService(bookRepository)
 const bookController: IBookController = new BookController(bookService)
 
 bookRouter.route('/books/top-five-books').get(AliasTopBooks, bookController.getAllBooks)
+bookRouter.route('/books/stats').get(bookController.getBookStats)
 
 bookRouter
   .route('/books')

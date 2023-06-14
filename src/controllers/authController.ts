@@ -81,6 +81,8 @@ export class AuthController implements IAuthController {
     next()
   })
 
+  passwordReset = catchAsync(async (req: Request, res: Response, next: NextFunction) => {})
+
   restrictedTo = (...roles: roles[]) => {
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
       if (!roles.includes(req.user.role)) throw new ApiError('You dont have permission to access this route.', 401)

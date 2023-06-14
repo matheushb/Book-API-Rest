@@ -40,18 +40,7 @@ const BookSchema = new mongoose.Schema<IBook>(
     },
     genre: {
       type: [String],
-      enum: [
-        'Action',
-        'Drama',
-        'Romance',
-        'Adventure',
-        'Mistery',
-        'Sci-Fi',
-        'Horror',
-        'Fantasy',
-        'Thriller',
-        'Children',
-      ],
+      enum: ['Action', 'Drama', 'Romance', 'Adventure', 'Mistery', 'Sci-Fi', 'Fantasy', 'Thriller', 'Children'],
       required: true,
     },
     synopsis: {

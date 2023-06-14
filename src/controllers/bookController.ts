@@ -57,4 +57,12 @@ export class BookController implements IBookController {
       data,
     })
   })
+
+  getBookStats = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const stats = await this.bookService.getBookStats()
+    return res.status(200).json({
+      status: 'success',
+      stats,
+    })
+  })
 }
