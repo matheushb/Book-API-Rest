@@ -9,9 +9,11 @@ export interface IDecodedPayload {
 }
 
 export interface IAuthController {
-  userSign(req: Request, res: Response, next: NextFunction): Promise<any>
-  userLogin(req: Request, res: Response, next: NextFunction): Promise<any>
-  getAllUsers(req: Request, res: Response, next: NextFunction): Promise<any>
-  protectRoute(req: Request, res: Response, next: NextFunction): void
+  userSign(req: Request, res: Response, next: NextFunction): Promise<Response>
+  userLogin(req: Request, res: Response, next: NextFunction): Promise<Response>
+  getAllUsers(req: Request, res: Response, next: NextFunction): Promise<Response>
+  protectRoute(req: Request, res: Response, next: NextFunction): NextFunction
+  updateSelf(req: Request, res: Response, next: NextFunction): Promise<Response>
+  deleteSelf(req: Request, res: Response, next: NextFunction): Promise<Response>
   restrictedTo(...roles: roles[]): NextFunction
 }

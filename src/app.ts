@@ -1,10 +1,14 @@
-//created by em book
 import express, { urlencoded } from 'express'
 import * as dotenv from 'dotenv'
-import bookRouter from './routes/bookRouter'
-import { databaseConnect } from './config/mongoConfig'
+import morgan from 'morgan'
+import rateLimit from 'express-rate-limit'
+import helmet from 'helmet'
+import mongoSanatize from 'express-mongo-sanitize'
+import xss from 'xss-clean'
 import { errorHandlingMiddleware } from './middlewares/errorHandling'
+import { databaseConnect } from './config/mongoConfig'
 import userRouter from './routes/userRouter'
+import bookRouter from './routes/bookRouter'
 dotenv.config({ path: './src/config/.env' })
 
 const app = express()
@@ -15,8 +19,18 @@ process.on('uncaughtException', error => {
   process.exit(1)
 })
 
-app.use(express.json())
+const limiter = rateLimit({
+  max: 50,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests, please try again in an hour',
+})
+app.use(helmet())
+app.use(express.json({ limit: '10kb' }))
+app.use(mongoSanatize())
+app.use(xss())
 app.use(urlencoded({ extended: true }))
+app.use(morgan('dev'))
+app.use('/api', limiter)
 app.use('/api/v1/', bookRouter)
 app.use('/api/v1/users', userRouter)
 app.use(errorHandlingMiddleware)

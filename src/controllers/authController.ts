@@ -4,9 +4,9 @@ import User from '../models/UserSchema'
 import { ApiError } from '../utils/ApiError'
 import { catchAsync } from '../utils/catchAsyncError'
 import jwt from 'jsonwebtoken'
+import { getToken } from '../utils/getToken'
 
 export class AuthController implements IAuthController {
-  //
   signToken = (id: string) => {
     return jwt.sign({ id }, process.env.JWT_SECRET!, {
       expiresIn: process.env.JWT_EXPIRES_IN,
@@ -24,6 +24,12 @@ export class AuthController implements IAuthController {
       createdAt: req.body.createdAt,
     })
     const token = this.signToken(data.id)
+    data.password = ''
+    res.cookie('JWT', token, {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    })
+
     res.status(201).json({
       status: 'success',
       data,
@@ -36,9 +42,15 @@ export class AuthController implements IAuthController {
 
     const user = await User.findOne({ email: req.body.email }, { _id: 1, email: 1, password: 1 })
 
-    if (!user || !(await user?.comparePass(req.body.password, user.password)))
+    if (!user || !(await user?.comparePass(req.body.password, user.password))) {
       return next(new ApiError('Wrong email or password.', 401))
+    }
     const token = this.signToken(user.id)
+
+    res.cookie('JWT', token, {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    })
 
     res.status(200).json({
       status: 'success',
@@ -48,8 +60,7 @@ export class AuthController implements IAuthController {
   })
 
   getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const data = await User.find()
-
+    const data = await User.find({ active: { $ne: false } })
     res.status(200).json({
       status: 'success',
       results: data.length,
@@ -67,25 +78,67 @@ export class AuthController implements IAuthController {
   })
 
   protectRoute = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    let token
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1]
-    }
-    if (!token) return next(new ApiError("You're not logged in, please login to access routes", 401))
+    let token = getToken(req.headers.authorization)
 
+    if (!token) return next(new ApiError('You need to be logged in to perform this action.', 401))
     const decodedPayload = <IDecodedPayload>jwt.verify(token, process.env.JWT_SECRET!)
     const user = await User.findOne({ _id: decodedPayload.id })
-
-    if (!user) return next(new ApiError('Please Log In again.', 401))
+    if (!user) return next(new ApiError('User with this token doesnt exists, please log in again.', 401))
+    if (decodedPayload.iat < Number((user.createdAt.getTime() / 1000).toFixed()))
+      return next(new ApiError('Token was issued after user was created', 401))
     req.user = user
     next()
   })
 
-  passwordReset = catchAsync(async (req: Request, res: Response, next: NextFunction) => {})
+  passwordReset = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findById(req.user._id)
+    user!.password = req.body.password
+    user!.passwordConfirm = req.body.passwordConfirm
+    user!.passwordChangedAt = Date.now()
+    await user?.save()
+    const token = this.signToken(user!.id)
+
+    res.status(201).json({
+      status: 'success',
+      message: 'Password changed!',
+      token,
+    })
+  })
+
+  updateSelf = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.password || req.body.passwordConfirm || req.body.role)
+      return next(new ApiError('Invalid fields received through body.', 400))
+    console.log(req.body, req.user)
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        name: req.body.name,
+        email: req.body.email,
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    )
+
+    res.status(200).json({
+      status: 'success',
+      updatedUser,
+    })
+  })
+
+  deleteSelf = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    await User.findByIdAndUpdate(req.user._id, { active: false })
+    res.status(204).json({
+      status: 'success',
+      message: 'Your account have been deactivated.',
+    })
+  })
 
   restrictedTo = (...roles: roles[]) => {
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-      if (!roles.includes(req.user.role)) throw new ApiError('You dont have permission to access this route.', 401)
+      if (!roles.includes(req.user.role)) throw new ApiError('You need to be logged in to perform this action.', 401)
       return next()
     })
   }

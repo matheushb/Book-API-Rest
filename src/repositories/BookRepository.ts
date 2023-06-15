@@ -8,7 +8,6 @@ import { ApiError } from '../utils/ApiError'
 export class BookRepository implements IBookRepository {
   getAllBooks = async (queryParams: object, queryFilter: IQueryFilterDTO): Promise<IBook[]> => {
     if (queryFilter.skip! >= (await Book.countDocuments())) throw new ApiError('This page doesnt exists!', 404)
-    console.log(queryFilter)
 
     const query = Book.find(queryParams).sort(queryFilter.sort)
 
