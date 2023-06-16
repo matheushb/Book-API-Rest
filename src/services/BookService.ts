@@ -1,7 +1,7 @@
-import IBookService, { IQueryFilterDTO } from '../interfaces/IBookService'
-import IBookRepository from '../interfaces/IBookRepository'
-import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
-import { IBook } from '../interfaces/IBook'
+import IBookService, { IQueryFilterDTO } from '../interfaces/book/IBookService'
+import IBookRepository from '../interfaces/book/IBookRepository'
+import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/book/bookDTOs'
+import { IBook } from '../interfaces/book/IBook'
 
 export class BookService implements IBookService {
   constructor(private readonly bookRepository: IBookRepository) {}

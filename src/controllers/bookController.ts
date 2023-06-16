@@ -1,8 +1,8 @@
-import IBookController from '../interfaces/IBookController'
-import IBookService from '../interfaces/IBookService'
+import IBookController from '../interfaces/book/IBookController'
+import IBookService from '../interfaces/book/IBookService'
 import { NextFunction, Request, Response } from 'express'
-import { catchAsync } from '../utils/catchAsyncError'
-import { ApiError } from '../utils/ApiError'
+import { catchAsync } from '../utils/error/catchAsyncError'
+import { ApiError } from '../utils/error/ApiError'
 
 export class BookController implements IBookController {
   constructor(private readonly bookService: IBookService) {}

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { IBook } from '../interfaces/IBook'
+import { IBook } from '../interfaces/book/IBook'
 import slugify from 'slugify'
 
 const BookSchema = new mongoose.Schema<IBook>(
@@ -30,9 +30,10 @@ const BookSchema = new mongoose.Schema<IBook>(
       type: Number,
       required: [true, 'Please insert a price.'],
     },
-    autor: {
-      type: [String],
-      required: [true, 'Please insert the book autor.'],
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Authors',
+      required: [true, 'Please insert the book author.'],
     },
     editor: {
       type: String,

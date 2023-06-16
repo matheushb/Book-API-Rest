@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { roles } from './IAuthController'
+import { roles } from '../authentication/IAuthController'
 
 export interface IUser extends Document {
   _id?: ObjectId

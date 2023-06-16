@@ -1,10 +1,12 @@
+import mongoose from 'mongoose'
+
 export interface IBook extends Object {
   title: string
   slug: string
   totalPages: number
   yearPublished: number
   price: number
-  autor: string[]
+  author: mongoose.Schema.Types.ObjectId
   editor: string
   genre: string[]
   synopsis: string

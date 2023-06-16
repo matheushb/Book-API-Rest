@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
-import { IUser } from '../interfaces/IUser'
+import { IUser } from '../interfaces/user/IUser'
 import bcrypt from 'bcrypt'
 
 const UserSchema = new mongoose.Schema<IUser>(

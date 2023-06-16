@@ -1,17 +1,19 @@
-import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
-import { IBook } from '../interfaces/IBook'
-import IBookRepository from '../interfaces/IBookRepository'
-import { IQueryFilterDTO } from '../interfaces/IBookService'
+import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/book/bookDTOs'
+import { IBook } from '../interfaces/book/IBook'
+import IBookRepository from '../interfaces/book/IBookRepository'
+import { IQueryFilterDTO } from '../interfaces/book/IBookService'
 import Book from '../models/BookSchema'
-import { ApiError } from '../utils/ApiError'
+import { ApiError } from '../utils/error/ApiError'
 
 export class BookRepository implements IBookRepository {
   getAllBooks = async (queryParams: object, queryFilter: IQueryFilterDTO): Promise<IBook[]> => {
     if (queryFilter.skip! >= (await Book.countDocuments())) throw new ApiError('This page doesnt exists!', 404)
 
-    const query = Book.find(queryParams).sort(queryFilter.sort)
-
-    query.skip(queryFilter.skip!).limit(queryFilter.limit!)
+    const query = Book.find(queryParams)
+      .populate('author')
+      .sort(queryFilter.sort)
+      .skip(queryFilter.skip!)
+      .limit(queryFilter.limit!)
 
     if (queryFilter.fields) query.select(queryFilter.fields)
 
@@ -24,9 +26,10 @@ export class BookRepository implements IBookRepository {
       totalPages: data.totalPages,
       yearPublished: data.yearPublished,
       price: data.price,
-      autor: data.autor,
+      autor: data.author,
       editor: data.editor,
       genre: data.genre,
+      author: data.author,
       synopsis: data.synopsis,
       ratingAverage: data.ratingAverage,
       ratingQuantity: data.ratingQuantity,

@@ -4,11 +4,13 @@ import morgan from 'morgan'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import mongoSanatize from 'express-mongo-sanitize'
+import hpp from 'hpp'
 import xss from 'xss-clean'
 import { errorHandlingMiddleware } from './middlewares/errorHandling'
 import { databaseConnect } from './config/mongoConfig'
 import userRouter from './routes/userRouter'
 import bookRouter from './routes/bookRouter'
+import authorRouter from './routes/authorRouter'
 dotenv.config({ path: './src/config/.env' })
 
 const app = express()
@@ -27,12 +29,14 @@ const limiter = rateLimit({
 app.use(helmet())
 app.use(express.json({ limit: '10kb' }))
 app.use(mongoSanatize())
+app.use(hpp())
 app.use(xss())
 app.use(urlencoded({ extended: true }))
 app.use(morgan('dev'))
 app.use('/api', limiter)
-app.use('/api/v1/', bookRouter)
+app.use('/api/v1/books', bookRouter)
 app.use('/api/v1/users', userRouter)
+app.use('/api/v1/authors', authorRouter)
 app.use(errorHandlingMiddleware)
 app.all('*', (req, res) => {
   res.status(404).json({

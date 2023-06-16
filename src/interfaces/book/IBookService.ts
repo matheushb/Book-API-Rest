@@ -1,4 +1,4 @@
-import { ICreateBookDTO, IUpdateBookDTO } from '../DTOs/bookDTOs'
+import { ICreateBookDTO, IUpdateBookDTO } from '../../DTOs/book/bookDTOs'
 import { IBook } from './IBook'
 export default interface IBookService {
   getAllBooks(fullQuery: Object): Promise<IBook[]>
