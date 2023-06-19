@@ -33,7 +33,7 @@ export class AuthorController implements IAuthorController {
   })
 
   updateAuthorById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.body || !req.params) throw new ApiError('No information received.', 404)
+    if (!req.body || !req.params) return next(new ApiError('No information received.', 404))
     const data = await this.authorService.updateAuthorById(req.params.id, req.body)
     res.status(200).json({
       status: 'success',
