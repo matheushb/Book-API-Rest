@@ -1,53 +1,49 @@
 import { Request, Response, NextFunction } from 'express'
 import { IAuthorController } from '../interfaces/author/IAuthorController'
 import { catchAsync } from '../utils/error/catchAsyncError'
-import Authors from '../models/AuthorSchema'
 import { ApiError } from '../utils/error/ApiError'
+import { AuthorService } from '../services/AuthorService'
 
 export class AuthorController implements IAuthorController {
+  constructor(private readonly authorService: AuthorService) {}
   getAllAuthors = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const data = await Authors.find()
+    const data = await this.authorService.getAllAuthors()
     res.status(200).json({
       status: 'success',
       results: data.length,
       data,
     })
   })
-  createAuthor = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const data = await Authors.create({
-      name: req.body.name,
-      age: req.body.age,
-      nacionality: req.body.nacionality,
+
+  getAuthorById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const data = await this.authorService.getAuthorById(req.params.id)
+    res.status(200).json({
+      status: 'success',
+      data,
     })
+  })
+
+  createAuthor = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.body) return next(new ApiError('No information received.', 404))
+    const data = await this.authorService.createAuthor(req.body)
     res.status(201).json({
       status: 'success',
       'Data Created': data,
     })
   })
-  updateAuthorById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const author = await Authors.findById(req.params.id)
-    if (!author) return next(new ApiError('No author found to update.', 404))
-    const data = await Authors.findByIdAndUpdate(
-      req.params.id,
-      {
-        name: req.body.name,
-        age: req.body.age,
-        nacionality: req.body.nacionality,
-      },
-      {
-        new: true,
-      }
-    )
 
+  updateAuthorById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.body || !req.params) throw new ApiError('No information received.', 404)
+    const data = await this.authorService.updateAuthorById(req.params.id, req.body)
     res.status(200).json({
       status: 'success',
       'Data updated': data,
     })
   })
+
   deleteAuthorById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const author = await Authors.findById(req.params.id)
-    if (!author) return next(new ApiError('No author found to update.', 404))
-    const data = await Authors.findByIdAndDelete(req.params.id)
+    if (!req.params) return next(new ApiError('No information received.', 404))
+    const data = await this.authorService.deleteAuthorById(req.params.id)
     res.status(200).json({
       status: 'success',
       'Data updated': data,

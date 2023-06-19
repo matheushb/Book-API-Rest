@@ -1,6 +1,5 @@
 import { IUserController } from '../interfaces/user/IUserController'
 import { NextFunction, Request, Response } from 'express'
-import User from '../models/UserSchema'
 import { ApiError } from '../utils/error/ApiError'
 import { catchAsync } from '../utils/error/catchAsyncError'
 import { IUserService } from '../interfaces/user/IUserService'

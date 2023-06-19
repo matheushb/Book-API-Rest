@@ -8,7 +8,7 @@ export const errorHandlingMiddleware = (
   next: NextFunction
 ) => {
   if (error.name === 'CastError') {
-    error.message = 'Unable to find book by ID'
+    error.message = 'Unable to find by ID'
     error.statusCode = 404
   }
 

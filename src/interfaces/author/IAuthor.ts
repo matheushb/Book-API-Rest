@@ -3,3 +3,5 @@ export interface IAuthor extends Document {
   age?: number
   nacionality: string
 }
+
+export interface IUpdateAuthorDTO extends Partial<IAuthor> {}
